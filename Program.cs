@@ -31,14 +31,25 @@ namespace MomoIsYou
 			//Game Loop
 			while(Window.IsOpen)
 			{
+				//Run Event Handlers
+				Window.DispatchEvents();
 
+				for (int i = 0; i < 5; i++)
+                {
+					for (int j = 0; j < 5; j++)
+                    {
+						Console.Write(GameSpace[i, j]);
+                    }
+					Console.WriteLine();
+                }
+				Console.WriteLine();
             }
 		}
 		static void OnClose(object sender, EventArgs e)
 		{
 			// Close the window when OnClose event is received
-			RenderWindow window = (RenderWindow)sender;
-			window.Close();
+			RenderWindow Window = (RenderWindow)sender;
+			Window.Close();
 		}
 	}
 }
