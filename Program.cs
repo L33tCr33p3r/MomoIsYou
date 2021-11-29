@@ -15,11 +15,13 @@ namespace MomoIsYou
 	{
 		static void Main()
 		{
-			//Open SFML Window
+			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
+
 			RenderWindow Window = new RenderWindow(new VideoMode(500, 500), "Momo is You");
 			Window.Closed += new EventHandler(OnClose);
 
-			//Set up a (basic) playing area in an array
+			/////////////////////////////// Set up a playing area in an array ///////////////////////////////
+
 			int[,] GameSpace = new int[5, 5] {
 				{00, 00, 00, 00, 00},
 				{00, 00, 00, 00, 00},
@@ -28,22 +30,27 @@ namespace MomoIsYou
 				{00, 00, 00, 00, 00}
 			};
 
-			//Game Loop
-			while(Window.IsOpen)
+			//////////////////// Initialize tile objects ////////////////////
+
+
+
+			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
+
+			while (Window.IsOpen)
 			{
 				//Run Event Handlers
 				Window.DispatchEvents();
 
 				for (int i = 0; i < 5; i++)
-                {
+				{
 					for (int j = 0; j < 5; j++)
-                    {
+					{
 						Console.Write(GameSpace[i, j]);
-                    }
+					}
 					Console.WriteLine();
-                }
+				}
 				Console.WriteLine();
-            }
+			}
 		}
 		static void OnClose(object sender, EventArgs e)
 		{
@@ -52,4 +59,9 @@ namespace MomoIsYou
 			Window.Close();
 		}
 	}
+	class Tile
+    {
+		public bool isPush = false;
+		public bool isChainPush = false;
+    }
 }
