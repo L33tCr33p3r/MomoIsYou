@@ -8,48 +8,79 @@ using SFML.Window;
 using SFML.Graphics;
 using SFML.Audio;
 
-
 namespace MomoIsYou
 {
-	class Program
+    class Program
 	{
 		static void Main()
 		{
 			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
 
-			RenderWindow Window = new RenderWindow(new VideoMode(500, 500), "Momo is You");
+			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
 			Window.Closed += new EventHandler(OnClose);
 
 			/////////////////////////////// Set up a playing area in an array ///////////////////////////////
 
-			int[,] GameSpace = new int[5, 5] {
-				{00, 00, 00, 00, 00},
-				{00, 00, 00, 00, 00},
-				{00, 01, 02, 02, 00},
-				{00, 00, 00, 00, 00},
-				{00, 00, 00, 00, 00}
+			int[,] Map = new int[8, 8] {
+				{00, 00, 00, 00, 00, 00, 00, 00},
+				{00, 00, 02, 00, 00, 00, 00, 00},
+				{00, 00, 00, 00, 00, 00, 00, 00},
+				{00, 00, 02, 02, 02, 00, 00, 00},
+				{00, 00, 00, 00, 00, 00, 00, 00},
+				{00, 00, 02, 02, 00, 00, 00, 00},
+				{00, 00, 00, 00, 00, 00, 01, 00},
+				{00, 00, 00, 00, 00, 00, 00, 00}
 			};
 
-			//////////////////// Initialize tile objects ////////////////////
+			//////////////////////////////////// Instantiate tile objects ///////////////////////////////////
 
+			Tile momo = new Tile();
+			momo.mapIdentifier = 1;
+			momo.tileColor = Color.Green;
 
+			Tile crate = new Tile();
+			crate.mapIdentifier = 2;
+			crate.tileColor = Color.Red;
 
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
 
 			while (Window.IsOpen)
 			{
-				//Run Event Handlers
+				// Run Event Handlers
 				Window.DispatchEvents();
 
-				for (int i = 0; i < 5; i++)
+				// Game Logic
+
+				for (int i = 0; i < 8; i++)
+                {
+					for (int j = 0; j < 8; j++)
+                    {
+						if (Map[i, j] == 1)
+                        {
+							
+                        }
+                    }
+                }
+
+				// Render section
+				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
+				Window.Draw(bg);
+
+				for (int i = 0; i < 8; i++)
 				{
-					for (int j = 0; j < 5; j++)
+					for (int j = 0; j < 8; j++)
 					{
-						Console.Write(GameSpace[i, j]);
+						if (Map[i, j] == 1)
+						{
+							momo.RenderSolid(Window, i, j);
+						}
+						if (Map[i, j] == 2)
+						{
+							crate.RenderSolid(Window, i, j);
+						}
 					}
-					Console.WriteLine();
 				}
-				Console.WriteLine();
+				Window.Display();
 			}
 		}
 		static void OnClose(object sender, EventArgs e)
@@ -59,9 +90,4 @@ namespace MomoIsYou
 			Window.Close();
 		}
 	}
-	class Tile
-    {
-		public bool isPush = false;
-		public bool isChainPush = false;
-    }
 }
