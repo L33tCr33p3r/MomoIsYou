@@ -16,11 +16,17 @@ namespace MomoIsYou
 		{
 			////////////////////////////////////// Set up game variables ////////////////////////////////////
 
-			Queue moveEvents = new Queue();
 			const int UP = 0;
 			const int DOWN = 1;
 			const int LEFT = 2;
 			const int RIGHT = 3;
+
+			Tile moveTarget;
+			int moveDirection;
+			int moveXPos;
+			int moveYPos;
+
+			Queue moveEvents = new Queue();
 
 			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
 
@@ -69,7 +75,7 @@ namespace MomoIsYou
 					{
 						if (tile.Identifier == initMap[i, j])
 						{
-							Map[i, j] = tile;
+							Map[j, i] = tile;
 						}
 					}
 				}
@@ -91,30 +97,41 @@ namespace MomoIsYou
 						{
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
 							{
-								moveEvents.Enqueue((Map, Map[i, j], UP, (i, j)));
+								moveTarget = Map[i, j];
+								moveDirection = UP;
+								moveXPos = i;
+								moveYPos = j;
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
 							{
-								moveEvents.Enqueue((Map, Map[i, j], DOWN, (i, j)));
+								moveTarget = Map[i, j];
+								moveDirection = DOWN;
+								moveXPos = i;
+								moveYPos = j;
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
 							{
-								moveEvents.Enqueue((Map, Map[i, j], LEFT, (i, j)));
+								moveTarget = Map[i, j];
+								moveDirection = LEFT;
+								moveXPos = i;
+								moveYPos = j;
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
 							{
-								moveEvents.Enqueue((Map, Map[i, j], RIGHT, (i, j)));
+								moveTarget = Map[i, j];
+								moveDirection = RIGHT;
+								moveXPos = i;
+								moveYPos = j;
 							}
 						}
 					}
 				}
-
+				
 				// Game logic
-				foreach (Tuple eventArgs in moveEvents)
-                {
-					Move(moveEvents.Dequeue());
-                }
-
+				
+				Move(Map, moveTarget, moveDirection, moveXPos, moveYPos);
+				
+				
 				// Render section
 				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
 				Window.Draw(bg);
@@ -123,20 +140,15 @@ namespace MomoIsYou
 				{
 					for (int j = 0; j < Map.GetLength(1); j++)
 					{
-						Map[i, j].Render(Window, j, i);
+						Map[i, j].Render(Window, i, j);
 					}
 				}
 				Window.Display();
 			}
 		}
-		static void Move(Tuple moveArgs)
+		static void Move(Tile[,] Map, Tile moveType, int moveDir, int xPos, int yPos)
         {
-			Tile[,] Map;
-			Tile MoveTileType;
-			int moveDirection;
-			int xPos;
-			int yPos;
-			(Map, MoveTileType, moveDirection, (xPos, yPos)) = moveArgs;
+			
         }
 		static void OnClose(object sender, EventArgs e)
 		{
