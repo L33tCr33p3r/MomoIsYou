@@ -11,7 +11,7 @@ namespace MomoIsYou
 		public Texture tileTexture;
 
 		public bool isYou = false;
-		public bool isColide = true;
+		public bool isColide = false;
 		public bool isPush = false;
 		public bool isChainPush = false;
 

@@ -12,27 +12,12 @@ namespace MomoIsYou
 {
 	class Program
 	{
+		const int UP = 0;
+		const int DOWN = 1;
+		const int LEFT = 2;
+		const int RIGHT = 3;
 		static void Main()
 		{
-			////////////////////////////////////// Set up game variables ////////////////////////////////////
-
-			const int UP = 0;
-			const int DOWN = 1;
-			const int LEFT = 2;
-			const int RIGHT = 3;
-
-			Tile moveTarget;
-			int moveDirection;
-			int moveXPos;
-			int moveYPos;
-
-			Queue moveEvents = new Queue();
-
-			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
-
-			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
-			Window.Closed += new EventHandler(OnClose);
-
 			//////////////////////////////////// Instantiate tile objects ///////////////////////////////////
 
 			ArrayList tileTypes = new ArrayList();
@@ -45,12 +30,32 @@ namespace MomoIsYou
 			Tile momo = new Tile();
 			momo.Identifier = 1;
 			momo.tileColor = Color.Green;
+			momo.isColide = true;
+			momo.isYou = true;
 			tileTypes.Add(momo);
 
 			Tile crate = new Tile();
 			crate.Identifier = 2;
 			crate.tileColor = Color.Red;
+			crate.isColide = true;
 			tileTypes.Add(crate);
+
+			////////////////////////////////////// Set up game variables ////////////////////////////////////
+
+			Tile moveTarget;
+			int moveDirection;
+			int moveXPos;
+			int moveYPos;
+
+			(int, int, int) moveArgs = (UP, 0, 0);
+
+			Queue moveEvents = new Queue();
+
+			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
+
+			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
+			Window.Closed += new EventHandler(OnClose);
+			Window.SetFramerateLimit(5);
 
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
@@ -101,6 +106,9 @@ namespace MomoIsYou
 								moveDirection = UP;
 								moveXPos = i;
 								moveYPos = j;
+								moveArgs = (UP, i, j);
+
+								moveEvents.Enqueue(1);
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
 							{
@@ -108,6 +116,9 @@ namespace MomoIsYou
 								moveDirection = DOWN;
 								moveXPos = i;
 								moveYPos = j;
+								moveArgs = (DOWN, i, j);
+
+								moveEvents.Enqueue(1);
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
 							{
@@ -115,6 +126,9 @@ namespace MomoIsYou
 								moveDirection = LEFT;
 								moveXPos = i;
 								moveYPos = j;
+								moveArgs = (LEFT, i, j);
+
+								moveEvents.Enqueue(1);
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
 							{
@@ -122,15 +136,21 @@ namespace MomoIsYou
 								moveDirection = RIGHT;
 								moveXPos = i;
 								moveYPos = j;
+								moveArgs = (RIGHT, i, j);
+
+								moveEvents.Enqueue(1);
 							}
 						}
 					}
 				}
 				
 				// Game logic
-				
-				Move(Map, moveTarget, moveDirection, moveXPos, moveYPos);
-				
+				foreach (object moveEvent in moveEvents)
+                {
+					(moveDirection, moveXPos, moveYPos) = moveArgs;
+					Move(Map, moveDirection, moveXPos, moveYPos);
+				}
+				moveEvents.Clear();
 				
 				// Render section
 				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
@@ -146,10 +166,65 @@ namespace MomoIsYou
 				Window.Display();
 			}
 		}
-		static void Move(Tile[,] Map, Tile moveType, int moveDir, int xPos, int yPos)
+		static void Move(Tile[,] Map, int moveDir, int xPos, int yPos)
         {
-			
-        }
+			if (moveDir == UP)
+            {
+				if (Map[xPos, yPos-1].isColide)
+                {
+
+                }
+                else
+                {
+					Tile self = Map[xPos, yPos];
+					Tile destination = Map[xPos, yPos - 1];
+					Map[xPos, yPos - 1] = self;
+					Map[xPos, yPos] = destination;
+				}
+            }
+			else if (moveDir == DOWN)
+			{
+				if (Map[xPos, yPos + 1].isColide)
+				{
+
+				}
+				else
+				{
+					Tile self = Map[xPos, yPos];
+					Tile destination = Map[xPos, yPos + 1];
+					Map[xPos, yPos + 1] = self;
+					Map[xPos, yPos] = destination;
+				}
+			}
+			else if (moveDir == LEFT)
+			{
+				if (Map[xPos - 1, yPos].isColide)
+				{
+
+				}
+				else
+				{
+					Tile self = Map[xPos, yPos];
+					Tile destination = Map[xPos - 1, yPos];
+					Map[xPos - 1, yPos] = self;
+					Map[xPos, yPos] = destination;
+				}
+			}
+			if (moveDir == RIGHT)
+			{
+				if (Map[xPos + 1, yPos].isColide)
+				{
+
+				}
+				else
+				{
+					Tile self = Map[xPos, yPos];
+					Tile destination = Map[xPos + 1, yPos];
+					Map[xPos + 1, yPos] = self;
+					Map[xPos, yPos] = destination;
+				}
+			}
+		}
 		static void OnClose(object sender, EventArgs e)
 		{
 			// Close the window when OnClose event is received
