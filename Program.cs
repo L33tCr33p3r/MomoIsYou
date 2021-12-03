@@ -38,6 +38,7 @@ namespace MomoIsYou
 			crate.Identifier = 2;
 			crate.tileColor = Color.Red;
 			crate.isColide = true;
+			crate.isYou = false;
 			tileTypes.Add(crate);
 
 			////////////////////////////////////// Set up game variables ////////////////////////////////////
@@ -55,7 +56,7 @@ namespace MomoIsYou
 
 			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
 			Window.Closed += new EventHandler(OnClose);
-			Window.SetFramerateLimit(5);
+			//Window.SetFramerateLimit(5);
 
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
@@ -93,6 +94,19 @@ namespace MomoIsYou
 				// Run SFML event handlers
 				Window.DispatchEvents();
 
+				// Render section
+				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
+				Window.Draw(bg);
+
+				for (int i = 0; i < Map.GetLength(0); i++)
+				{
+					for (int j = 0; j < Map.GetLength(1); j++)
+					{
+						Map[i, j].Render(Window, i, j);
+					}
+				}
+				Window.Display();
+
 				// User input
 				for (int i = 0; i < Map.GetLength(0); i++)
 				{
@@ -100,6 +114,7 @@ namespace MomoIsYou
 					{
 						if (Map[i, j].isYou)
 						{
+							Window.WaitAndDispatchEvents();
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
 							{
 								moveTarget = Map[i, j];
@@ -151,26 +166,17 @@ namespace MomoIsYou
 					Move(Map, moveDirection, moveXPos, moveYPos);
 				}
 				moveEvents.Clear();
-				
-				// Render section
-				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
-				Window.Draw(bg);
-
-				for (int i = 0; i < Map.GetLength(0); i++)
-				{
-					for (int j = 0; j < Map.GetLength(1); j++)
-					{
-						Map[i, j].Render(Window, i, j);
-					}
-				}
-				Window.Display();
 			}
 		}
 		static void Move(Tile[,] Map, int moveDir, int xPos, int yPos)
         {
 			if (moveDir == UP)
             {
-				if (Map[xPos, yPos-1].isColide)
+				if (yPos == 0)
+                {
+
+                }
+				else if (Map[xPos, yPos-1].isColide)
                 {
 
                 }
@@ -184,7 +190,11 @@ namespace MomoIsYou
             }
 			else if (moveDir == DOWN)
 			{
-				if (Map[xPos, yPos + 1].isColide)
+				if (yPos + 1 >= Map.GetLength(0))
+                {
+
+                }
+				else if (Map[xPos, yPos + 1].isColide)
 				{
 
 				}
@@ -198,7 +208,11 @@ namespace MomoIsYou
 			}
 			else if (moveDir == LEFT)
 			{
-				if (Map[xPos - 1, yPos].isColide)
+				if (xPos == 0)
+                {
+
+                }
+				else if (Map[xPos - 1, yPos].isColide)
 				{
 
 				}
@@ -212,7 +226,11 @@ namespace MomoIsYou
 			}
 			if (moveDir == RIGHT)
 			{
-				if (Map[xPos + 1, yPos].isColide)
+				if (xPos + 1 >= Map.GetLength(1))
+                {
+
+                }
+				else if (Map[xPos + 1, yPos].isColide)
 				{
 
 				}
