@@ -168,35 +168,42 @@ namespace MomoIsYou
 				moveEvents.Clear();
 			}
 		}
-		static void Move(Tile[,] Map, int moveDir, int xPos, int yPos)
+		static bool Move(Tile[,] Map, int moveDir, int xPos, int yPos)
         {
+
 			if (moveDir == UP)
-            {
+			{
 				if (yPos == 0)
-                {
-
-                }
-				else if (Map[xPos, yPos-1].isColide)
-                {
-
-                }
-                else
-                {
+				{
+					return false;
+				}
+				else if (Map[xPos, yPos - 1].isColide)
+				{
+					if (Map[xPos, yPos - 1].isPush)
+					{
+						Move(Map, moveDir, xPos, yPos - 1);
+						return true;
+					}
+					return false;
+				}
+				else
+				{
 					Tile self = Map[xPos, yPos];
 					Tile destination = Map[xPos, yPos - 1];
 					Map[xPos, yPos - 1] = self;
 					Map[xPos, yPos] = destination;
+					return true;
 				}
-            }
+			}
 			else if (moveDir == DOWN)
 			{
 				if (yPos + 1 >= Map.GetLength(0))
-                {
-
-                }
+				{
+					return false;
+				}
 				else if (Map[xPos, yPos + 1].isColide)
 				{
-
+					return false;
 				}
 				else
 				{
@@ -204,17 +211,18 @@ namespace MomoIsYou
 					Tile destination = Map[xPos, yPos + 1];
 					Map[xPos, yPos + 1] = self;
 					Map[xPos, yPos] = destination;
+					return true;
 				}
 			}
 			else if (moveDir == LEFT)
 			{
 				if (xPos == 0)
-                {
-
-                }
+				{
+					return false;
+				}
 				else if (Map[xPos - 1, yPos].isColide)
 				{
-
+					return false;
 				}
 				else
 				{
@@ -222,17 +230,18 @@ namespace MomoIsYou
 					Tile destination = Map[xPos - 1, yPos];
 					Map[xPos - 1, yPos] = self;
 					Map[xPos, yPos] = destination;
+					return true;
 				}
 			}
-			if (moveDir == RIGHT)
+			else if (moveDir == RIGHT)
 			{
 				if (xPos + 1 >= Map.GetLength(1))
-                {
-
-                }
+				{
+					return false;
+				}
 				else if (Map[xPos + 1, yPos].isColide)
 				{
-
+					return false;
 				}
 				else
 				{
@@ -240,8 +249,10 @@ namespace MomoIsYou
 					Tile destination = Map[xPos + 1, yPos];
 					Map[xPos + 1, yPos] = self;
 					Map[xPos, yPos] = destination;
+					return true;
 				}
 			}
+			else return false;
 		}
 		static void OnClose(object sender, EventArgs e)
 		{
