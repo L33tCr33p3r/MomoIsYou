@@ -25,20 +25,25 @@ namespace MomoIsYou
 			Tile air = new Tile();
 			air.Identifier = 0;
 			air.tileColor = Color.White;
+			air.isYou = false;
+			air.isColide = false;
+			air.isPush = false;
 			tileTypes.Add(air);
 
 			Tile momo = new Tile();
 			momo.Identifier = 1;
 			momo.tileColor = Color.Green;
-			momo.isColide = true;
 			momo.isYou = true;
+			momo.isColide = true;
+			momo.isPush = true;
 			tileTypes.Add(momo);
 
 			Tile crate = new Tile();
 			crate.Identifier = 2;
 			crate.tileColor = Color.Red;
-			crate.isColide = true;
 			crate.isYou = false;
+			crate.isColide = true;
+			crate.isPush = true;
 			tileTypes.Add(crate);
 
 			////////////////////////////////////// Set up game variables ////////////////////////////////////
@@ -56,7 +61,6 @@ namespace MomoIsYou
 
 			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
 			Window.Closed += new EventHandler(OnClose);
-			//Window.SetFramerateLimit(5);
 
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
@@ -163,14 +167,13 @@ namespace MomoIsYou
 				foreach (object moveEvent in moveEvents)
                 {
 					(moveDirection, moveXPos, moveYPos) = moveArgs;
-					Move(Map, moveDirection, moveXPos, moveYPos);
+					Push(Map, moveDirection, moveXPos, moveYPos);
 				}
 				moveEvents.Clear();
 			}
 		}
-		static bool Move(Tile[,] Map, int moveDir, int xPos, int yPos)
+		static bool Push(Tile[,] Map, int moveDir, int xPos, int yPos)
         {
-
 			if (moveDir == UP)
 			{
 				if (yPos == 0)
@@ -181,10 +184,18 @@ namespace MomoIsYou
 				{
 					if (Map[xPos, yPos - 1].isPush)
 					{
-						Move(Map, moveDir, xPos, yPos - 1);
-						return true;
+						bool safeCheck = Push(Map, moveDir, xPos, yPos - 1);
+						if (safeCheck)
+						{
+							Tile self = Map[xPos, yPos];
+							Tile destination = Map[xPos, yPos - 1];
+							Map[xPos, yPos - 1] = self;
+							Map[xPos, yPos] = destination;
+							return true;
+						}
+						else return false;
 					}
-					return false;
+					else return false;
 				}
 				else
 				{
@@ -203,7 +214,20 @@ namespace MomoIsYou
 				}
 				else if (Map[xPos, yPos + 1].isColide)
 				{
-					return false;
+					if (Map[xPos, yPos + 1].isPush)
+					{
+						bool safeCheck = Push(Map, moveDir, xPos, yPos + 1);
+						if (safeCheck)
+						{
+							Tile self = Map[xPos, yPos];
+							Tile destination = Map[xPos, yPos + 1];
+							Map[xPos, yPos + 1] = self;
+							Map[xPos, yPos] = destination;
+							return true;
+						}
+						else return false;
+					}
+					else return false;
 				}
 				else
 				{
@@ -222,7 +246,20 @@ namespace MomoIsYou
 				}
 				else if (Map[xPos - 1, yPos].isColide)
 				{
-					return false;
+					if (Map[xPos - 1, yPos].isPush)
+					{
+						bool safeCheck = Push(Map, moveDir, xPos - 1, yPos);
+						if (safeCheck)
+						{
+							Tile self = Map[xPos, yPos];
+							Tile destination = Map[xPos - 1, yPos];
+							Map[xPos - 1, yPos] = self;
+							Map[xPos, yPos] = destination;
+							return true;
+						}
+						else return false;
+					}
+					else return false;
 				}
 				else
 				{
@@ -241,7 +278,20 @@ namespace MomoIsYou
 				}
 				else if (Map[xPos + 1, yPos].isColide)
 				{
-					return false;
+					if (Map[xPos + 1, yPos].isPush)
+					{
+						bool safeCheck = Push(Map, moveDir, xPos + 1, yPos);
+						if (safeCheck)
+						{
+							Tile self = Map[xPos, yPos];
+							Tile destination = Map[xPos + 1, yPos];
+							Map[xPos + 1, yPos] = self;
+							Map[xPos, yPos] = destination;
+							return true;
+						}
+						else return false;
+					}
+					else return false;
 				}
 				else
 				{

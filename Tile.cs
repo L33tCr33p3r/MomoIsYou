@@ -13,12 +13,7 @@ namespace MomoIsYou
 		public bool isYou = false;
 		public bool isColide = false;
 		public bool isPush = false;
-		public bool isChainPush = false;
 
-		public void Push(object[,] Map)
-        {
-
-        }
 		public void Render(RenderWindow Window, int x, int y)
         {
 			RectangleShape tileBorder = new RectangleShape(new Vector2f(100, 100));
