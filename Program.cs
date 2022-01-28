@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
@@ -12,10 +13,6 @@ namespace MomoIsYou
 {
 	class Program
 	{
-		const int UP = 0;
-		const int DOWN = 1;
-		const int LEFT = 2;
-		const int RIGHT = 3;
 		static void Main()
 		{
 			//////////////////////////////////// Instantiate tile objects ///////////////////////////////////
@@ -46,16 +43,17 @@ namespace MomoIsYou
 			crate.isPush = true;
 			tileTypes.Add(crate);
 
+			Tile rock = new Tile();
+			rock.Identifier = 3;
+			rock.tileColor = Color.Blue;
+			rock.isYou = false;
+			rock.isColide = true;
+			rock.isPush = false;
+			tileTypes.Add(rock);
+
 			////////////////////////////////////// Set up game variables ////////////////////////////////////
 
-			Tile moveTarget;
-			int moveDirection;
-			int moveXPos;
-			int moveYPos;
-
-			(int, int, int) moveArgs = (UP, 0, 0);
-
-			Queue moveEvents = new Queue();
+			List<MoveArg> moveEvents = new List<MoveArg>();
 
 			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
 
@@ -67,15 +65,15 @@ namespace MomoIsYou
 			int[,] initMap = new int[8, 8] {
 				{00, 00, 00, 00, 00, 00, 00, 00},
 				{00, 00, 02, 00, 00, 00, 00, 00},
-				{00, 00, 00, 00, 00, 00, 00, 00},
-				{00, 00, 02, 02, 02, 00, 00, 00},
-				{00, 00, 00, 00, 00, 00, 00, 00},
-				{00, 00, 02, 02, 00, 00, 00, 00},
+				{00, 00, 00, 00, 03, 00, 01, 00},
+				{00, 00, 02, 03, 03, 00, 00, 00},
 				{00, 00, 00, 00, 00, 00, 01, 00},
+				{00, 00, 02, 02, 00, 02, 00, 00},
+				{00, 00, 00, 00, 02, 00, 00, 00},
 				{00, 00, 00, 00, 00, 00, 00, 00}
 			};
 
-			Tile[,] Map = new Tile[initMap.GetLength(0), initMap.GetLength(1)];
+			Tile[,] map = new Tile[initMap.GetLength(0), initMap.GetLength(1)];
 
 			for (int i = 0; i < initMap.GetLength(0); i++)
 			{
@@ -85,7 +83,7 @@ namespace MomoIsYou
 					{
 						if (tile.Identifier == initMap[i, j])
 						{
-							Map[j, i] = tile;
+							map[j, i] = tile;
 						}
 					}
 				}
@@ -95,102 +93,76 @@ namespace MomoIsYou
 
 			while (Window.IsOpen)
 			{
-				// Run SFML event handlers
-				Window.DispatchEvents();
-
-				// Render section
-				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
-				Window.Draw(bg);
-
-				for (int i = 0; i < Map.GetLength(0); i++)
-				{
-					for (int j = 0; j < Map.GetLength(1); j++)
-					{
-						Map[i, j].Render(Window, i, j);
-					}
-				}
-				Window.Display();
-
 				// User input
-				for (int i = 0; i < Map.GetLength(0); i++)
+				for (int i = 0; i < map.GetLength(0); i++)
 				{
-					for (int j = 0; j < Map.GetLength(1); j++)
+					for (int j = 0; j < map.GetLength(1); j++)
 					{
-						if (Map[i, j].isYou)
+						if (map[i, j].isYou)
 						{
-							Window.WaitAndDispatchEvents();
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
 							{
-								moveTarget = Map[i, j];
-								moveDirection = UP;
-								moveXPos = i;
-								moveYPos = j;
-								moveArgs = (UP, i, j);
-
-								moveEvents.Enqueue(1);
+								moveEvents.Add(new MoveArg(Direction.UP, i, j));
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
 							{
-								moveTarget = Map[i, j];
-								moveDirection = DOWN;
-								moveXPos = i;
-								moveYPos = j;
-								moveArgs = (DOWN, i, j);
-
-								moveEvents.Enqueue(1);
+								moveEvents.Add(new MoveArg(Direction.DOWN, i, j));
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
 							{
-								moveTarget = Map[i, j];
-								moveDirection = LEFT;
-								moveXPos = i;
-								moveYPos = j;
-								moveArgs = (LEFT, i, j);
-
-								moveEvents.Enqueue(1);
+								moveEvents.Add(new MoveArg(Direction.LEFT, i, j));
 							}
 							if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
 							{
-								moveTarget = Map[i, j];
-								moveDirection = RIGHT;
-								moveXPos = i;
-								moveYPos = j;
-								moveArgs = (RIGHT, i, j);
-
-								moveEvents.Enqueue(1);
+								moveEvents.Add(new MoveArg(Direction.RIGHT, i, j));
 							}
 						}
 					}
 				}
 				
 				// Game logic
-				foreach (object moveEvent in moveEvents)
-                {
-					(moveDirection, moveXPos, moveYPos) = moveArgs;
-					Push(Map, moveDirection, moveXPos, moveYPos);
+				foreach (MoveArg moveEvent in moveEvents)
+				{
+					Push(map, moveEvent.moveDirection, moveEvent.xPos, moveEvent.yPos);
 				}
 				moveEvents.Clear();
+
+				// Render section
+				RectangleShape bg = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
+				Window.Draw(bg);
+
+				for (int i = 0; i < map.GetLength(0); i++)
+				{
+					for (int j = 0; j < map.GetLength(1); j++)
+					{
+						map[i, j].Render(Window, i, j);
+					}
+				}
+				Window.Display();
+
+				// Run SFML event handlers
+				Window.WaitAndDispatchEvents();
 			}
 		}
-		static bool Push(Tile[,] Map, int moveDir, int xPos, int yPos)
-        {
-			if (moveDir == UP)
+		static bool Push(Tile[,] map, Direction moveDir, int xPos, int yPos)
+		{
+			if (moveDir == Direction.UP)
 			{
 				if (yPos == 0)
 				{
 					return false;
 				}
-				else if (Map[xPos, yPos - 1].isColide)
+				else if (map[xPos, yPos - 1].isColide)
 				{
-					if (Map[xPos, yPos - 1].isPush)
+					if (map[xPos, yPos - 1].isPush)
 					{
-						bool safeCheck = Push(Map, moveDir, xPos, yPos - 1);
+						bool safeCheck = Push(map, moveDir, xPos, yPos - 1);
 						if (safeCheck)
 						{
-							Tile self = Map[xPos, yPos];
-							Tile destination = Map[xPos, yPos - 1];
-							Map[xPos, yPos - 1] = self;
-							Map[xPos, yPos] = destination;
+							Tile self = map[xPos, yPos];
+							Tile destination = map[xPos, yPos - 1];
+							map[xPos, yPos - 1] = self;
+							map[xPos, yPos] = destination;
 							return true;
 						}
 						else return false;
@@ -199,30 +171,30 @@ namespace MomoIsYou
 				}
 				else
 				{
-					Tile self = Map[xPos, yPos];
-					Tile destination = Map[xPos, yPos - 1];
-					Map[xPos, yPos - 1] = self;
-					Map[xPos, yPos] = destination;
+					Tile self = map[xPos, yPos];
+					Tile destination = map[xPos, yPos - 1];
+					map[xPos, yPos - 1] = self;
+					map[xPos, yPos] = destination;
 					return true;
 				}
 			}
-			else if (moveDir == DOWN)
+			else if (moveDir == Direction.DOWN)
 			{
-				if (yPos + 1 >= Map.GetLength(0))
+				if (yPos + 1 >= map.GetLength(0))
 				{
 					return false;
 				}
-				else if (Map[xPos, yPos + 1].isColide)
+				else if (map[xPos, yPos + 1].isColide)
 				{
-					if (Map[xPos, yPos + 1].isPush)
+					if (map[xPos, yPos + 1].isPush)
 					{
-						bool safeCheck = Push(Map, moveDir, xPos, yPos + 1);
+						bool safeCheck = Push(map, moveDir, xPos, yPos + 1);
 						if (safeCheck)
 						{
-							Tile self = Map[xPos, yPos];
-							Tile destination = Map[xPos, yPos + 1];
-							Map[xPos, yPos + 1] = self;
-							Map[xPos, yPos] = destination;
+							Tile self = map[xPos, yPos];
+							Tile destination = map[xPos, yPos + 1];
+							map[xPos, yPos + 1] = self;
+							map[xPos, yPos] = destination;
 							return true;
 						}
 						else return false;
@@ -231,30 +203,30 @@ namespace MomoIsYou
 				}
 				else
 				{
-					Tile self = Map[xPos, yPos];
-					Tile destination = Map[xPos, yPos + 1];
-					Map[xPos, yPos + 1] = self;
-					Map[xPos, yPos] = destination;
+					Tile self = map[xPos, yPos];
+					Tile destination = map[xPos, yPos + 1];
+					map[xPos, yPos + 1] = self;
+					map[xPos, yPos] = destination;
 					return true;
 				}
 			}
-			else if (moveDir == LEFT)
+			else if (moveDir == Direction.LEFT)
 			{
 				if (xPos == 0)
 				{
 					return false;
 				}
-				else if (Map[xPos - 1, yPos].isColide)
+				else if (map[xPos - 1, yPos].isColide)
 				{
-					if (Map[xPos - 1, yPos].isPush)
+					if (map[xPos - 1, yPos].isPush)
 					{
-						bool safeCheck = Push(Map, moveDir, xPos - 1, yPos);
+						bool safeCheck = Push(map, moveDir, xPos - 1, yPos);
 						if (safeCheck)
 						{
-							Tile self = Map[xPos, yPos];
-							Tile destination = Map[xPos - 1, yPos];
-							Map[xPos - 1, yPos] = self;
-							Map[xPos, yPos] = destination;
+							Tile self = map[xPos, yPos];
+							Tile destination = map[xPos - 1, yPos];
+							map[xPos - 1, yPos] = self;
+							map[xPos, yPos] = destination;
 							return true;
 						}
 						else return false;
@@ -263,30 +235,30 @@ namespace MomoIsYou
 				}
 				else
 				{
-					Tile self = Map[xPos, yPos];
-					Tile destination = Map[xPos - 1, yPos];
-					Map[xPos - 1, yPos] = self;
-					Map[xPos, yPos] = destination;
+					Tile self = map[xPos, yPos];
+					Tile destination = map[xPos - 1, yPos];
+					map[xPos - 1, yPos] = self;
+					map[xPos, yPos] = destination;
 					return true;
 				}
 			}
-			else if (moveDir == RIGHT)
+			else if (moveDir == Direction.RIGHT)
 			{
-				if (xPos + 1 >= Map.GetLength(1))
+				if (xPos + 1 >= map.GetLength(1))
 				{
 					return false;
 				}
-				else if (Map[xPos + 1, yPos].isColide)
+				else if (map[xPos + 1, yPos].isColide)
 				{
-					if (Map[xPos + 1, yPos].isPush)
+					if (map[xPos + 1, yPos].isPush)
 					{
-						bool safeCheck = Push(Map, moveDir, xPos + 1, yPos);
+						bool safeCheck = Push(map, moveDir, xPos + 1, yPos);
 						if (safeCheck)
 						{
-							Tile self = Map[xPos, yPos];
-							Tile destination = Map[xPos + 1, yPos];
-							Map[xPos + 1, yPos] = self;
-							Map[xPos, yPos] = destination;
+							Tile self = map[xPos, yPos];
+							Tile destination = map[xPos + 1, yPos];
+							map[xPos + 1, yPos] = self;
+							map[xPos, yPos] = destination;
 							return true;
 						}
 						else return false;
@@ -295,10 +267,10 @@ namespace MomoIsYou
 				}
 				else
 				{
-					Tile self = Map[xPos, yPos];
-					Tile destination = Map[xPos + 1, yPos];
-					Map[xPos + 1, yPos] = self;
-					Map[xPos, yPos] = destination;
+					Tile self = map[xPos, yPos];
+					Tile destination = map[xPos + 1, yPos];
+					map[xPos + 1, yPos] = self;
+					map[xPos, yPos] = destination;
 					return true;
 				}
 			}
