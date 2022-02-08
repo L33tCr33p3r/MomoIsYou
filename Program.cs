@@ -15,23 +15,13 @@ namespace MomoIsYou
 
 			List<Tile> TileTypes = new List<Tile>();
 
-			Tile Air = new Tile
-			{
-				Identifier = 0,
-				TileColor = Color.White,
-				IsYou = false,
-				IsColide = false,
-				IsPush = false
-			};
-			TileTypes.Add(Air);
-
 			Tile Momo = new Tile
 			{
 				Identifier = 1,
 				TileColor = Color.Green,
 				IsYou = true,
-				IsColide = true,
-				IsPush = true
+				IsColide = false,
+				IsPush = false
 			};
 			TileTypes.Add(Momo);
 
@@ -40,7 +30,7 @@ namespace MomoIsYou
 				Identifier = 2,
 				TileColor = Color.Red,
 				IsYou = false,
-				IsColide = true,
+				IsColide = false,
 				IsPush = true
 			};
 			TileTypes.Add(Crate);
@@ -85,6 +75,7 @@ namespace MomoIsYou
 				for (int j = 0; j < InitMap.GetLength(1); j++)
 				{
 					Level.Map[i, j] = new List<Tile>();
+					Level.Map[i, j].TrimExcess();
 					foreach (Tile tile in TileTypes)
 					{
 						if (tile.Identifier == InitMap[i, j])
@@ -112,15 +103,15 @@ namespace MomoIsYou
 								{
 									MoveEvents.Add(new MoveArgs(Tile, Direction.UP, i, j));
 								}
-								if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
+								else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
 								{
 									MoveEvents.Add(new MoveArgs(Tile, Direction.DOWN, i, j));
 								}
-								if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
+								else if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
 								{
 									MoveEvents.Add(new MoveArgs(Tile, Direction.LEFT, i, j));
 								}
-								if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
+								else if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
 								{
 									MoveEvents.Add(new MoveArgs(Tile, Direction.RIGHT, i, j));
 								}

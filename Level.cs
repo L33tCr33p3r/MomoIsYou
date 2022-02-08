@@ -8,121 +8,76 @@ namespace MomoIsYou
 	{
 		public List<Tile>[,] Map;
 
-        public bool Move(Tile StartTile, Direction MoveDir, int yPos, int xPos)
-        {
+		public bool Move(Tile StartTile, Direction MoveDir, int yPos, int xPos)
+		{
+			int yTarg = yPos;
+			int xTarg = xPos;
 			if (MoveDir == Direction.UP)
 			{
-				if (MoveCheck(MoveDir, yPos, xPos))
-				{
-					foreach (Tile TargetTile in Map[yPos - 1, xPos])
-					{
-						if (TargetTile.IsPush) Move(TargetTile, MoveDir, yPos - 1, xPos);
-					}
-					Map[yPos - 1, xPos].Add(StartTile);
-					Map[yPos, xPos].Remove(StartTile);
-					return true;
-				}
-				else return false;
+				yTarg = yPos - 1;
 			}
-			if (MoveDir == Direction.DOWN)
+			else if (MoveDir == Direction.DOWN)
 			{
-				if (MoveCheck(MoveDir, yPos, xPos))
-				{
-					foreach (Tile TargetTile in Map[yPos + 1, xPos])
-					{
-						if (TargetTile.IsPush) Move(TargetTile, MoveDir, yPos + 1, xPos);
-					}
-					Map[yPos + 1, xPos].Add(StartTile);
-					Map[yPos, xPos].Remove(StartTile);
-					return true;
-				}
-				else return false;
+				yTarg = yPos + 1;
 			}
-			if (MoveDir == Direction.LEFT)
+			else if (MoveDir == Direction.LEFT)
 			{
-				if (MoveCheck(MoveDir, yPos, xPos))
-				{
-					foreach (Tile TargetTile in Map[yPos, xPos - 1])
-					{
-						if (TargetTile.IsPush) Move(TargetTile, MoveDir, yPos, xPos - 1);
-					}
-					Map[yPos, xPos - 1].Add(StartTile);
-					Map[yPos, xPos].Remove(StartTile);
-					return true;
-				}
-				else return false;
+				xTarg = xPos - 1;
 			}
-			if (MoveDir == Direction.RIGHT)
+			else if (MoveDir == Direction.RIGHT)
 			{
-				if (MoveCheck(MoveDir, yPos, xPos))
+				xTarg = xPos + 1;
+			}
+
+			if (MoveCheck(MoveDir, yPos, xPos))
+			{
+				for(int listPos = 0; listPos < Map[yTarg, xTarg].Capacity; listPos++)
 				{
-					foreach (Tile TargetTile in Map[yPos, xPos + 1])
-					{
-						if (TargetTile.IsPush) Move(TargetTile, MoveDir, yPos, xPos + 1);
-					}
-					Map[yPos, xPos + 1].Add(StartTile);
-					Map[yPos, xPos].Remove(StartTile);
-					return true;
+					Tile TargetTile = Map[yTarg, xTarg][listPos];
+					if (TargetTile.IsPush) Move(TargetTile, MoveDir, yTarg, xTarg);
 				}
-				else return false;
+				Map[yTarg, xTarg].Add(StartTile);
+				Map[yPos, xPos].Remove(StartTile);
+				Map[yPos, xPos].TrimExcess();
+
+				return true;
 			}
 			else return false;
-        }
+		}
 		public bool MoveCheck(Direction MoveDir, int yPos, int xPos)
 		{
+			int yTarg = yPos;
+			int xTarg = xPos;
 			if (MoveDir == Direction.UP)
 			{
 				if (yPos == 0) return false; //Prevent array overflows
-				foreach (Tile TargetTile in Map[yPos - 1, xPos])
-				{
-					if (TargetTile.IsPush)
-					{
-						if (!MoveCheck(MoveDir, yPos - 1, xPos)) return false;
-					}
-					else if (TargetTile.IsColide) return false;
-				}
-				return true;
+				yTarg = yPos - 1;
 			}
 			else if (MoveDir == Direction.DOWN)
 			{
 				if (yPos + 1 >= Map.GetLength(0)) return false; //Prevent array overflows
-				foreach (Tile TargetTile in Map[yPos + 1, xPos])
-				{
-					if (TargetTile.IsPush)
-					{
-						if (!MoveCheck(MoveDir, yPos + 1, xPos)) return false;
-					}
-					else if (TargetTile.IsColide) return false;
-				}
-				return true;
+				yTarg = yPos + 1;
 			}
 			else if (MoveDir == Direction.LEFT)
 			{
 				if (xPos == 0) return false; //Prevent array overflows
-				foreach (Tile TargetTile in Map[xPos - 1, yPos])
-				{
-					if (TargetTile.IsPush)
-					{
-						if (!MoveCheck(MoveDir, xPos - 1, yPos)) return false;
-					}
-					else if (TargetTile.IsColide) return false;
-				}
-				return true;
+				xTarg = xPos - 1;
 			}
 			else if (MoveDir == Direction.RIGHT)
 			{
-				if (xPos + 1 >= Map.GetLength(0)) return false; //Prevent array overflows
-				foreach (Tile TargetTile in Map[xPos + 1, yPos])
-				{
-					if (TargetTile.IsPush)
-					{
-						if (!MoveCheck(MoveDir, xPos + 1, yPos)) return false;
-					}
-					else if (TargetTile.IsColide) return false;
-				}
-				return true;
+				if (xPos + 1 >= Map.GetLength(1)) return false; //Prevent array overflows
+				xTarg = xPos + 1;
 			}
-			else return false;
+
+			foreach (Tile TargetTile in Map[yTarg, xTarg])
+			{
+				if (TargetTile.IsPush)
+				{
+					if (!MoveCheck(MoveDir, yTarg, xTarg)) return false;
+				}
+				else if (TargetTile.IsColide) return false;
+			}
+			return true;
 		}
 	}
 }
