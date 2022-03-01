@@ -9,6 +9,7 @@ namespace MomoIsYou
 {
 	class Program
 	{
+		bool Debug = false;
 		static void Main()
 		{
 			//////////////////////////////////// Instantiate tile objects ///////////////////////////////////
@@ -61,7 +62,7 @@ namespace MomoIsYou
 				{00, 00, 02, 00, 00, 00, 00, 00},
 				{00, 00, 00, 00, 03, 00, 01, 00},
 				{00, 00, 02, 03, 03, 00, 00, 00},
-				{00, 00, 00, 00, 00, 00, 01, 00},
+				{00, 00, 00, 00, 00, 00, 00, 00},
 				{00, 00, 02, 02, 00, 02, 00, 00},
 				{00, 00, 00, 00, 02, 00, 00, 00},
 				{00, 00, 00, 00, 00, 00, 00, 00}
@@ -87,7 +88,7 @@ namespace MomoIsYou
 			}
 
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
-
+			
 			while (Window.IsOpen)
 			{
 				// User input
@@ -123,7 +124,8 @@ namespace MomoIsYou
 				// Game logic
 				foreach (MoveArgs MoveEvent in MoveEvents)
 				{
-					Level.Move(MoveEvent.MoveTile, MoveEvent.MoveDirection, MoveEvent.xPos, MoveEvent.yPos);
+					Level.Move(MoveEvent.MoveTile, MoveEvent.MoveDirection, MoveEvent.xPos, MoveEvent.yPos, Debug);
+					if (Debug) Console.Clear();
 				}
 				MoveEvents.Clear();
 

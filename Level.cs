@@ -8,7 +8,7 @@ namespace MomoIsYou
 	{
 		public List<Tile>[,] Map;
 
-		public bool Move(Tile StartTile, Direction MoveDir, int yPos, int xPos, int RecurseDepth = 0)
+		public bool Move(Tile StartTile, Direction MoveDir, int yPos, int xPos, bool Debug, int RecurseDepth = 0)
 		{
 			int yTarg = yPos;
 			int xTarg = xPos;
@@ -28,26 +28,31 @@ namespace MomoIsYou
 			{
 				xTarg = xPos + 1;
 			}
-
+			
 			if (MoveCheck(MoveDir, yPos, xPos))
 			{
 				List<Tile> TargSpace = Map[yTarg, xTarg];
 				List<Tile> SelfSpace = Map[yPos, xPos];
 				TargSpace.TrimExcess();
 				int listPos = 0;
-				int MaxTargIndex = TargSpace.Capacity - 1;
+				int MaxTargIndex = TargSpace.Count - 1;
 				while (listPos <= MaxTargIndex)
 				{
-					Console.WriteLine(listPos);
-					Console.WriteLine(MaxTargIndex);
-					Console.WriteLine(RecurseDepth);
-					Console.WriteLine();
-
+					if (Debug)
+                    {
+						Console.WriteLine(listPos);
+						Console.WriteLine(MaxTargIndex);
+						Console.WriteLine(RecurseDepth);
+						Console.WriteLine(TargSpace.Count);
+						Console.WriteLine(TargSpace.Capacity);
+						Console.WriteLine();
+					}
+					
 					if (listPos > MaxTargIndex) break;
 					Tile TargetTile = TargSpace[listPos];
 					if (TargetTile.IsPush)
 					{
-						Move(TargetTile, MoveDir, yTarg, xTarg, RecurseDepth + 1);
+						Move(TargetTile, MoveDir, yTarg, xTarg, Debug, RecurseDepth + 1);
 						MaxTargIndex--;
 					}
 					else listPos++;
@@ -55,6 +60,7 @@ namespace MomoIsYou
 				TargSpace.Add(StartTile);
 				SelfSpace.Remove(StartTile);
 				SelfSpace.TrimExcess();
+				TargSpace.TrimExcess();
 
 				return true;
 			}
