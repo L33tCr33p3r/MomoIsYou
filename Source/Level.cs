@@ -1,45 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MomoIsYou.Source.Interface;
 
-namespace MomoIsYou
+namespace MomoIsYou.Source
 {
 	internal class Level
 	{
-		public List<Tile>[,] Map;
+		public List<ITile>[,] Map;
 
-		public bool Move(Tile StartTile, Direction MoveDir, int yPos, int xPos, bool Debug, int RecurseDepth = 0)
+		public bool Move(ITile StartTile, Direction MoveDir, int yPos, int xPos, bool Debug, int RecurseDepth = 0)
 		{
 			int yTarg = yPos;
 			int xTarg = xPos;
-			if (MoveDir == Direction.UP)
-			{
-				yTarg = yPos - 1;
-			}
-			else if (MoveDir == Direction.DOWN)
-			{
-				yTarg = yPos + 1;
-			}
-			else if (MoveDir == Direction.LEFT)
-			{
-				xTarg = xPos - 1;
-			}
-			else if (MoveDir == Direction.RIGHT)
-			{
-				xTarg = xPos + 1;
-			}
+
+			if (MoveDir == Direction.UP) yTarg = yPos - 1;
+			else if (MoveDir == Direction.DOWN) yTarg = yPos + 1;
+			else if (MoveDir == Direction.LEFT) xTarg = xPos - 1;
+			else if (MoveDir == Direction.RIGHT) xTarg = xPos + 1;
 			
 			if (MoveCheck(MoveDir, yPos, xPos))
 			{
-				List<Tile> TargSpace = Map[yTarg, xTarg];
-				List<Tile> SelfSpace = Map[yPos, xPos];
-				TargSpace.TrimExcess();
+				List<ITile> TargSpace = Map[yTarg, xTarg];
+				List<ITile> SelfSpace = Map[yPos, xPos];
 				int listPos = 0;
 				int MaxTargIndex = TargSpace.Count - 1;
 				while (listPos <= MaxTargIndex)
 				{
 					if (Debug)
-                    {
+					{
 						Console.WriteLine(listPos);
 						Console.WriteLine(MaxTargIndex);
 						Console.WriteLine(RecurseDepth);
@@ -48,8 +37,7 @@ namespace MomoIsYou
 						Console.WriteLine();
 					}
 					
-					if (listPos > MaxTargIndex) break;
-					Tile TargetTile = TargSpace[listPos];
+					ITile TargetTile = TargSpace[listPos];
 					if (TargetTile.IsPush)
 					{
 						Move(TargetTile, MoveDir, yTarg, xTarg, Debug, RecurseDepth + 1);
@@ -72,26 +60,26 @@ namespace MomoIsYou
 			int xTarg = xPos;
 			if (MoveDir == Direction.UP)
 			{
-				if (yPos == 0) return false; //Prevent array overflows
+				if (yPos == 0) return false;
 				yTarg = yPos - 1;
 			}
 			else if (MoveDir == Direction.DOWN)
 			{
-				if (yPos + 1 >= Map.GetLength(0)) return false; //Prevent array overflows
+				if (yPos + 1 >= Map.GetLength(0)) return false;
 				yTarg = yPos + 1;
 			}
 			else if (MoveDir == Direction.LEFT)
 			{
-				if (xPos == 0) return false; //Prevent array overflows
+				if (xPos == 0) return false;
 				xTarg = xPos - 1;
 			}
 			else if (MoveDir == Direction.RIGHT)
 			{
-				if (xPos + 1 >= Map.GetLength(1)) return false; //Prevent array overflows
+				if (xPos + 1 >= Map.GetLength(1)) return false;
 				xTarg = xPos + 1;
 			}
 
-			foreach (Tile TargetTile in Map[yTarg, xTarg])
+			foreach (ITile TargetTile in Map[yTarg, xTarg])
 			{
 				if (TargetTile.IsPush)
 				{

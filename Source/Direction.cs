@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MomoIsYou
+namespace MomoIsYou.Source
 {
 	enum Direction
 	{

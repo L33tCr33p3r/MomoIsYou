@@ -4,51 +4,32 @@ using System.Collections.Generic;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
+using MomoIsYou.Source.Interface;
+using MomoIsYou.Source.Tile;
 
-namespace MomoIsYou
+namespace MomoIsYou.Source
 {
-	class Program
+	internal class Program
 	{
-		bool Debug = false;
-		static void Main()
+		static int Main()
 		{
 			//////////////////////////////////// Instantiate tile objects ///////////////////////////////////
 
-			List<Tile> TileTypes = new List<Tile>();
+			List<ITile> TileTypes = new List<ITile>();
 
-			Tile Momo = new Tile
-			{
-				Identifier = 1,
-				TileColor = Color.Green,
-				IsYou = true,
-				IsColide = false,
-				IsPush = false
-			};
+			MomoTile Momo = new MomoTile(true, false, false);
 			TileTypes.Add(Momo);
 
-			Tile Crate = new Tile
-			{
-				Identifier = 2,
-				TileColor = Color.Red,
-				IsYou = false,
-				IsColide = false,
-				IsPush = true
-			};
+			CrateTile Crate = new CrateTile(false, false, true);
 			TileTypes.Add(Crate);
 
-			Tile Rock = new Tile
-			{
-				Identifier = 3,
-				TileColor = Color.Blue,
-				IsYou = false,
-				IsColide = true,
-				IsPush = false
-			};
+			RockTile Rock = new RockTile(false, true, false);
 			TileTypes.Add(Rock);
 
 			////////////////////////////////////// Set up game variables ////////////////////////////////////
 
 			List<MoveArgs> MoveEvents = new List<MoveArgs>();
+			bool Debug = false;
 
 			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
 
@@ -57,27 +38,29 @@ namespace MomoIsYou
 
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
-			int[,] InitMap = new int[8, 8] {
-				{00, 00, 00, 00, 00, 00, 00, 00},
-				{00, 00, 02, 00, 00, 00, 00, 00},
-				{00, 00, 00, 00, 03, 00, 01, 00},
-				{00, 00, 02, 03, 03, 00, 00, 00},
-				{00, 00, 00, 00, 00, 00, 00, 00},
-				{00, 00, 02, 02, 00, 02, 00, 00},
-				{00, 00, 00, 00, 02, 00, 00, 00},
-				{00, 00, 00, 00, 00, 00, 00, 00}
+			int[,] InitMap = new int[8, 8] { 
+				{ 00, 00, 00, 00, 00, 00, 00, 00 }, 
+				{ 00, 00, 02, 00, 00, 00, 00, 00 }, 
+				{ 00, 00, 00, 00, 00, 00, 01, 00 }, 
+				{ 00, 00, 02, 00, 03, 00, 00, 00 }, 
+				{ 00, 00, 00, 03, 03, 00, 00, 00 }, 
+				{ 00, 00, 02, 02, 00, 02, 00, 00 }, 
+				{ 00, 00, 00, 00, 02, 00, 00, 00 }, 
+				{ 00, 00, 00, 00, 00, 00, 00, 00 } 
 			};
 
-			Level Level = new Level();
-			Level.Map = new List<Tile>[8, 8];
+			Level Level = new Level
+			{
+				Map = new List<ITile>[8, 8]
+			};
 
 			for (int i = 0; i < InitMap.GetLength(0); i++)
 			{
 				for (int j = 0; j < InitMap.GetLength(1); j++)
 				{
-					Level.Map[i, j] = new List<Tile>();
+					Level.Map[i, j] = new List<ITile>();
 					Level.Map[i, j].TrimExcess();
-					foreach (Tile tile in TileTypes)
+					foreach (MomoTile tile in TileTypes)
 					{
 						if (tile.Identifier == InitMap[i, j])
 						{
@@ -96,7 +79,7 @@ namespace MomoIsYou
 				{
 					for (int j = 0; j < Level.Map.GetLength(1); j++)
 					{
-						foreach (Tile Tile in Level.Map[i, j])
+						foreach (MomoTile Tile in Level.Map[i, j])
 						{
 							if (Tile.IsYou)
 							{
@@ -137,7 +120,7 @@ namespace MomoIsYou
 				{
 					for (int j = 0; j < Level.Map.GetLength(1); j++)
 					{
-						foreach (Tile Tile in Level.Map[i, j]) Tile.Render(Window, j, i);
+						foreach (MomoTile Tile in Level.Map[i, j]) Tile.Draw(Window, j, i);
 					}
 				}
 				Window.Display();
@@ -145,6 +128,7 @@ namespace MomoIsYou
 				// Run SFML event handlers
 				Window.WaitAndDispatchEvents();
 			}
+			return 0;
 		}
 		static void OnClose(object Sender, EventArgs e)
 		{
