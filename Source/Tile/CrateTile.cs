@@ -6,9 +6,12 @@ namespace MomoIsYou.Source.Tile
 {
     internal class CrateTile : ITile
     {
-		public static int Identifier { get; } = 2;
+		public static int TileID { get; } = 2;
 		public static Color TileColor { get; } = Color.Red;
 		public static Texture TileTexture { get; } = null;
+
+		public int XPos { get; set; }
+		public int YPos { get; set; }
 
 		public bool IsYou { get; set; }
 		public bool IsColide { get; set; }

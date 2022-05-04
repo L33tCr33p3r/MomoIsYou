@@ -27,13 +27,11 @@ namespace MomoIsYou.Source
 
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
-			Level Level = new Level(8, 8);
+			Level Level = new Level();
 
-			Level.TileList.Add(new MomoTile());
-			Level.Map[0, 0].Add(Level.TileList[Level.TileList.Count - 1]);
+			Level.Map.Add(new MomoTile());
 
-			Level.TileList.Add(new RockTile());
-			Level.Map[1, 1].Add(Level.TileList[Level.TileList.Count - 1]);
+			Level.Map.Add(new RockTile());
 
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
 

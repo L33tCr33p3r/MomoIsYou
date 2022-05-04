@@ -7,19 +7,15 @@ namespace MomoIsYou.Source
 {
 	internal class Level
 	{
-		public List<ITile> TileList { get; set; } = new List<ITile>();
-		public List<ITile>[,] Map { get; set; }
-
-		public Level(int YSize, int XSize)
+		public List<ITile> Map { get; set; } = new List<ITile>();
+		
+		public Level()
 		{
-			Map = new List<ITile>[YSize, XSize];
-			for (int i = 0; i < YSize; i++)
-			{
-				for (int j = 0; j < XSize; j++)
-				{
-					Map[i, j] = new List<ITile>();
-				}
-			}
+
+		}
+		public Level(Level Copy)
+		{
+			Map = Copy.Map;
 		}
 		public bool Move(MoveArgs MoveArgs, bool Debug, int RecurseDepth = 0)
 		{
