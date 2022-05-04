@@ -7,19 +7,36 @@ namespace MomoIsYou.Source
 {
 	internal class Level
 	{
-		public List<ITile>[,] Map;
+		public List<ITile> TileList { get; set; } = new List<ITile>();
+		public List<ITile>[,] Map { get; set; }
 
-		public bool Move(ITile StartTile, Direction MoveDir, int yPos, int xPos, bool Debug, int RecurseDepth = 0)
+		public Level(int YSize, int XSize)
 		{
+			Map = new List<ITile>[YSize, XSize];
+			for (int i = 0; i < YSize; i++)
+			{
+				for (int j = 0; j < XSize; j++)
+				{
+					Map[i, j] = new List<ITile>();
+				}
+			}
+		}
+		public bool Move(MoveArgs MoveArgs, bool Debug, int RecurseDepth = 0)
+		{
+			ITile MoveTile = MoveArgs.MoveTile;
+			Direction MoveDirection = MoveArgs.MoveDirection;
+			int xPos = MoveArgs.xPos;
+			int yPos = MoveArgs.yPos;
+
 			int yTarg = yPos;
 			int xTarg = xPos;
 
-			if (MoveDir == Direction.UP) yTarg = yPos - 1;
-			else if (MoveDir == Direction.DOWN) yTarg = yPos + 1;
-			else if (MoveDir == Direction.LEFT) xTarg = xPos - 1;
-			else if (MoveDir == Direction.RIGHT) xTarg = xPos + 1;
+			if (MoveDirection == Direction.Up) yTarg = yPos - 1;
+			else if (MoveDirection == Direction.Down) yTarg = yPos + 1;
+			else if (MoveDirection == Direction.Left) xTarg = xPos - 1;
+			else if (MoveDirection == Direction.Right) xTarg = xPos + 1;
 			
-			if (MoveCheck(MoveDir, yPos, xPos))
+			if (MoveCheck(MoveDirection, yPos, xPos))
 			{
 				List<ITile> TargSpace = Map[yTarg, xTarg];
 				List<ITile> SelfSpace = Map[yPos, xPos];
@@ -40,13 +57,13 @@ namespace MomoIsYou.Source
 					ITile TargetTile = TargSpace[listPos];
 					if (TargetTile.IsPush)
 					{
-						Move(TargetTile, MoveDir, yTarg, xTarg, Debug, RecurseDepth + 1);
+						Move(new MoveArgs(), Debug, RecurseDepth + 1);
 						MaxTargIndex--;
 					}
 					else listPos++;
 				}
-				TargSpace.Add(StartTile);
-				SelfSpace.Remove(StartTile);
+				TargSpace.Add(MoveTile);
+				SelfSpace.Remove(MoveTile);
 				SelfSpace.TrimExcess();
 				TargSpace.TrimExcess();
 
@@ -58,22 +75,22 @@ namespace MomoIsYou.Source
 		{
 			int yTarg = yPos;
 			int xTarg = xPos;
-			if (MoveDir == Direction.UP)
+			if (MoveDir == Direction.Up)
 			{
 				if (yPos == 0) return false;
 				yTarg = yPos - 1;
 			}
-			else if (MoveDir == Direction.DOWN)
+			else if (MoveDir == Direction.Down)
 			{
 				if (yPos + 1 >= Map.GetLength(0)) return false;
 				yTarg = yPos + 1;
 			}
-			else if (MoveDir == Direction.LEFT)
+			else if (MoveDir == Direction.Left)
 			{
 				if (xPos == 0) return false;
 				xTarg = xPos - 1;
 			}
-			else if (MoveDir == Direction.RIGHT)
+			else if (MoveDir == Direction.Right)
 			{
 				if (xPos + 1 >= Map.GetLength(1)) return false;
 				xTarg = xPos + 1;

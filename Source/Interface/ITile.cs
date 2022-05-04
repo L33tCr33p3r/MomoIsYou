@@ -8,9 +8,9 @@ namespace MomoIsYou.Source.Interface
 {
 	internal interface ITile
 	{
-		public int Identifier { get; set; }
-		public Color TileColor { get; set; }
-		public Texture TileTexture { get; set; }
+		public static int Identifier { get; }
+		public static Color TileColor { get; }
+		public static Texture TileTexture { get; }
 
 		public bool IsYou { get; set; }
 		public bool IsColide { get; set; }

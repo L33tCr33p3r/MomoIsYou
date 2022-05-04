@@ -6,9 +6,9 @@ namespace MomoIsYou.Source
 {
 	enum Direction
 	{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
+		Up,
+		Down,
+		Left,
+		Right,
 	}
 }
