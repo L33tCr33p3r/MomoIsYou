@@ -6,20 +6,15 @@ using System.Linq;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
-using MomoIsYou.Source.Interface;
+using MomoIsYou.Source.Abstract;
 using MomoIsYou.Source.Tile;
 
 namespace MomoIsYou.Source
 {
 	internal class Program
 	{
-		static bool Debug { get; } = false;
 		static int Main()
 		{
-			////////////////////////////////////// Set up game variables ////////////////////////////////////
-
-			List<MoveArgs> MoveEvents = new List<MoveArgs>();
-			
 			//////////////////////////////////////// Open SFML Window ///////////////////////////////////////
 
 			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
@@ -27,65 +22,49 @@ namespace MomoIsYou.Source
 
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
-			Level Level = new Level();
+			Level Level = new Level(8, 8);
 
-			Level.Map.Add(new MomoTile());
+			Level.Map.Add(new MomoTile(0, 0));
 
-			Level.Map.Add(new RockTile());
+			Level.Map.Add(new RockTile(1, 1));
+
+			Level.Map.Add(new CrateTile(2, 2));
 
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
 
 			while (Window.IsOpen)
 			{
 				// User input
-				for (int i = 0; i < Level.Map.GetLength(0); i++)
+				
+				foreach (BaseTile Tile in Level.Map)
 				{
-					for (int j = 0; j < Level.Map.GetLength(1); j++)
+					if (Tile.IsYou)
 					{
-						foreach (ITile Tile in Level.Map[i, j])
+						if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
 						{
-							if (Tile.IsYou)
-							{
-								if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
-								{
-									MoveEvents.Add(new MoveArgs(Tile, Direction.Up, i, j));
-								}
-								else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
-								{
-									MoveEvents.Add(new MoveArgs(Tile, Direction.Down, i, j));
-								}
-								else if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
-								{
-									MoveEvents.Add(new MoveArgs(Tile, Direction.Left, i, j));
-								}
-								else if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
-								{
-									MoveEvents.Add(new MoveArgs(Tile, Direction.Right, i, j));
-								}
-							}
+							Tile.Move(Direction.Up, Level);
+						}
+						else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
+						{
+							Tile.Move(Direction.Down, Level);
+						}
+						else if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
+						{
+							Tile.Move(Direction.Left, Level);
+						}
+						else if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
+						{
+							Tile.Move(Direction.Right, Level);
 						}
 					}
 				}
-				
-				// Game logic
-				foreach (MoveArgs MoveEvent in MoveEvents)
-				{
-					Level.Move(MoveEvent, Debug);
-					if (Debug) Console.Clear();
-				}
-				MoveEvents.Clear();
 
 				// Render section
 				RectangleShape Background = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
 				Window.Draw(Background);
-
-				for (int i = 0; i < Level.Map.GetLength(0); i++)
-				{
-					for (int j = 0; j < Level.Map.GetLength(1); j++)
-					{
-						foreach (ITile Tile in Level.Map[i, j]) Tile.Draw(Window, j, i);
-					}
-				}
+				
+				foreach (BaseTile Tile in Level.Map) Tile.Draw(Window);
+				
 				Window.Display();
 
 				// Run SFML event handlers

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MomoIsYou.Source.Interface
+namespace MomoIsYou.Source.Abstract
 {
-    internal interface IWord : ITile
+    internal abstract class BaseWord : BaseTile
     {
 
     }
