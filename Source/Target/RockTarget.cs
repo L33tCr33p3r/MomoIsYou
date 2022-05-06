@@ -1,14 +1,14 @@
 ﻿using SFML.Graphics;
 using MomoIsYou.Source.Abstract;
 
-namespace MomoIsYou.Source.Tile
+namespace MomoIsYou.Source.Target
 {
-	internal class MomoTile : BaseTile
-	{
-		public MomoTile(int XPos, int YPos)
+    internal class RockTarget : BaseTarget
+    {
+		public RockTarget(int XPos, int YPos)
 		{
-			TileID = TileID.MomoTile;
-			TileColor = Color.Green;
+			TileID = TileID.RockTarget;
+			TileColor = Color.Blue;
 			TileTexture = null;
 
 			this.XPos = XPos;

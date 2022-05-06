@@ -1,14 +1,14 @@
 ﻿using SFML.Graphics;
 using MomoIsYou.Source.Abstract;
 
-namespace MomoIsYou.Source.Tile
+namespace MomoIsYou.Source.Property
 {
-	internal class MomoTile : BaseTile
+	internal class StopProperty : BaseProperty
 	{
-		public MomoTile(int XPos, int YPos)
+		public StopProperty(int XPos, int YPos)
 		{
-			TileID = TileID.MomoTile;
-			TileColor = Color.Green;
+			TileID = TileID.PushProperty;
+			TileColor = Color.Magenta;
 			TileTexture = null;
 
 			this.XPos = XPos;

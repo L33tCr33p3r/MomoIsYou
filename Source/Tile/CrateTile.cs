@@ -16,7 +16,7 @@ namespace MomoIsYou.Source.Tile
 
 			IsYou = false;
 			IsStop = false;
-			IsPush = true;
+			IsPush = false;
 		}
 	}
 }

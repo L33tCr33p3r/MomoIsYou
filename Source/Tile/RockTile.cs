@@ -15,7 +15,7 @@ namespace MomoIsYou.Source.Tile
 			this.YPos = YPos;
 
 			IsYou = false;
-			IsStop = true;
+			IsStop = false;
 			IsPush = false;
 		}
 	}

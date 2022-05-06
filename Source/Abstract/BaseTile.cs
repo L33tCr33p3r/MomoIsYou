@@ -36,16 +36,42 @@ namespace MomoIsYou.Source.Abstract
 		}
 		public virtual void Update(Level Level)
 		{
-			foreach (BaseTarget TargetTile in Level.Map)
-			{
-				// Tile.GetType().IsAssignableFrom(typeof(BaseWord))
-				if (TargetTile.TargetID == TileID)
-				{
-					foreach (BaseOperator OperatorTile in Level.Map)
-					{
-						if (OperatorTile.TileID == TileID.IsWord)
-						{
+			IsYou = false;
+			IsStop = false;
+			IsPush = false;
 
+			foreach (BaseTile i in Level.Map)
+			{
+				if (typeof(BaseTarget).IsAssignableFrom(i.GetType()))
+				{
+					BaseTarget TargetTile = (BaseTarget)i;
+					foreach (BaseTile j in Level.Map)
+					{
+						if (typeof(BaseOperator).IsAssignableFrom(j.GetType()))
+						{
+							BaseOperator OperatorTile = (BaseOperator)j;
+							foreach (BaseTile k in Level.Map)
+							{
+								if (typeof(BaseProperty).IsAssignableFrom(k.GetType()))
+								{
+									BaseProperty PropertyTile = (BaseProperty)k;
+									if (TargetTile.TargetID == TileID)
+									{
+										if ((OperatorTile.XPos == XPos + 1 && OperatorTile.YPos == YPos) || (OperatorTile.XPos == XPos && OperatorTile.YPos == YPos + 1))
+										{
+											if (OperatorTile.TileID == TileID.IsOperator)
+											{
+												if ((PropertyTile.XPos == XPos + 2 && PropertyTile.YPos == YPos) || (PropertyTile.XPos == XPos && PropertyTile.YPos == YPos + 2))
+												{
+													if (PropertyTile.TileID == TileID.YouProperty) IsYou = true;
+													if (PropertyTile.TileID == TileID.StopProperty) IsStop = true;
+													if (PropertyTile.TileID == TileID.PushProperty) IsPush = true;
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
 using MomoIsYou.Source.Abstract;
+using MomoIsYou.Source.Operator;
+using MomoIsYou.Source.Property;
+using MomoIsYou.Source.Target;
 using MomoIsYou.Source.Tile;
 
 namespace MomoIsYou.Source
@@ -30,12 +29,23 @@ namespace MomoIsYou.Source
 
 			Level.Map.Add(new CrateTile(2, 2));
 
+			Level.Map.Add(new MomoTarget(5, 7));
+
+			Level.Map.Add(new IsOperator(6, 7));
+
+			Level.Map.Add(new YouProperty(7, 7));
+
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
 
 			while (Window.IsOpen)
 			{
+				foreach (BaseTile Tile in Level.Map)
+				{
+					Tile.Update(Level);
+				}
+
 				// User input
-				
+
 				foreach (BaseTile Tile in Level.Map)
 				{
 					if (Tile.IsYou)

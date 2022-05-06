@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MomoIsYou.Source
+﻿namespace MomoIsYou.Source
 {
 	internal enum TileID
 	{
-		CrateTile,
 		MomoTile,
+		CrateTile,
 		RockTile,
 
-		CrateWord,
-		MomoWord,
-		RockWord,
+		MomoTarget,
+		CrateTarget,
+		RockTarget,
 
-		IsWord,
+		IsOperator,
 
-		YouWord,
-		StopWord,
-		PushWord,
+		YouProperty,
+		StopProperty,
+		PushProperty,
 	}
 }

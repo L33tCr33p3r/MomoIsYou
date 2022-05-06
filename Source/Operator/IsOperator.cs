@@ -1,14 +1,14 @@
 ﻿using SFML.Graphics;
 using MomoIsYou.Source.Abstract;
 
-namespace MomoIsYou.Source.Tile
+namespace MomoIsYou.Source.Operator
 {
-	internal class MomoTile : BaseTile
+	internal class IsOperator : BaseOperator
 	{
-		public MomoTile(int XPos, int YPos)
+		public IsOperator(int XPos, int YPos)
 		{
-			TileID = TileID.MomoTile;
-			TileColor = Color.Green;
+			TileID = TileID.IsOperator;
+			TileColor = Color.White;
 			TileTexture = null;
 
 			this.XPos = XPos;
