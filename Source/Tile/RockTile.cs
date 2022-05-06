@@ -1,5 +1,4 @@
-﻿using SFML.System;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using MomoIsYou.Source.Abstract;
 
 namespace MomoIsYou.Source.Tile
@@ -8,7 +7,7 @@ namespace MomoIsYou.Source.Tile
 	{
 		public RockTile(int XPos, int YPos)
 		{
-			TileID = 3;
+			TileID = TileID.RockTile;
 			TileColor = Color.Blue;
 			TileTexture = null;
 
@@ -16,7 +15,7 @@ namespace MomoIsYou.Source.Tile
 			this.YPos = YPos;
 
 			IsYou = false;
-			IsColide = true;
+			IsStop = true;
 			IsPush = false;
 		}
 	}

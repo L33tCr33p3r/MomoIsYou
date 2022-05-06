@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MomoIsYou.Source
 {
-	enum Direction
+	internal enum Direction
 	{
 		Up,
 		Down,

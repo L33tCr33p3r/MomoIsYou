@@ -1,10 +1,11 @@
-﻿using SFML.System;
-using SFML.Graphics;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using MomoIsYou.Source.Abstract;
 
 namespace MomoIsYou.Source.Word
 {
-	internal class MomoWord
+	internal class MomoWord : BaseTarget
 	{
 		
 	}

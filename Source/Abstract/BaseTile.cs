@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SFML.System;
+﻿using SFML.System;
 using SFML.Graphics;
 
 namespace MomoIsYou.Source.Abstract
 {
 	internal abstract class BaseTile
 	{
-		public int TileID { get; set; }
+		public TileID TileID { get; set; }
 		public Color TileColor { get; set; }
 		public Texture TileTexture { get; set; }
 
@@ -16,7 +13,7 @@ namespace MomoIsYou.Source.Abstract
 		public int YPos { get; set; }
 
 		public bool IsYou { get; set; }
-		public bool IsColide { get; set; }
+		public bool IsStop { get; set; }
 		public bool IsPush { get; set; }
 
 		public void Draw(RenderWindow Window)
@@ -36,6 +33,23 @@ namespace MomoIsYou.Source.Abstract
 				FillColor = TileColor
 			};
 			Window.Draw(tileCenter);
+		}
+		public virtual void Update(Level Level)
+		{
+			foreach (BaseTarget TargetTile in Level.Map)
+			{
+				// Tile.GetType().IsAssignableFrom(typeof(BaseWord))
+				if (TargetTile.TargetID == TileID)
+				{
+					foreach (BaseOperator OperatorTile in Level.Map)
+					{
+						if (OperatorTile.TileID == TileID.IsWord)
+						{
+
+						}
+					}
+				}
+			}
 		}
 		public bool Move(Direction MoveDirection, Level Level)
 		{
@@ -100,7 +114,7 @@ namespace MomoIsYou.Source.Abstract
 					{
 						if (!TargetTile.PushCheck(MoveDirection, Level)) return false;
 					}
-					else if (TargetTile.IsColide) return false;
+					else if (TargetTile.IsStop) return false;
 				}
 			}
 			return true;
