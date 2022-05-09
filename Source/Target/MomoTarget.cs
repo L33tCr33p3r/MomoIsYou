@@ -17,6 +17,8 @@ namespace MomoIsYou.Source.Target
 			IsYou = false;
 			IsStop = false;
 			IsPush = false;
+
+			TargetID = TileID.MomoTile;
 		}
 	}
 }

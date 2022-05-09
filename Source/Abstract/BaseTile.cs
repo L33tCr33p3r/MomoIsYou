@@ -1,4 +1,5 @@
-﻿using SFML.System;
+﻿using System;
+using SFML.System;
 using SFML.Graphics;
 
 namespace MomoIsYou.Source.Abstract
@@ -16,7 +17,7 @@ namespace MomoIsYou.Source.Abstract
 		public bool IsStop { get; set; }
 		public bool IsPush { get; set; }
 
-		public void Draw(RenderWindow Window)
+		public virtual void Draw(RenderWindow Window)
 		{
 			RectangleShape tileBorder = new RectangleShape()
 			{
@@ -57,11 +58,11 @@ namespace MomoIsYou.Source.Abstract
 									BaseProperty PropertyTile = (BaseProperty)k;
 									if (TargetTile.TargetID == TileID)
 									{
-										if ((OperatorTile.XPos == XPos + 1 && OperatorTile.YPos == YPos) || (OperatorTile.XPos == XPos && OperatorTile.YPos == YPos + 1))
+										if ((OperatorTile.XPos == TargetTile.XPos + 1 && OperatorTile.YPos == TargetTile.YPos) || (OperatorTile.XPos == TargetTile.XPos && OperatorTile.YPos == TargetTile.YPos + 1))
 										{
 											if (OperatorTile.TileID == TileID.IsOperator)
 											{
-												if ((PropertyTile.XPos == XPos + 2 && PropertyTile.YPos == YPos) || (PropertyTile.XPos == XPos && PropertyTile.YPos == YPos + 2))
+												if ((PropertyTile.XPos == TargetTile.XPos + 2 && PropertyTile.YPos == TargetTile.YPos) || (PropertyTile.XPos == TargetTile.XPos && PropertyTile.YPos == TargetTile.YPos + 2))
 												{
 													if (PropertyTile.TileID == TileID.YouProperty) IsYou = true;
 													if (PropertyTile.TileID == TileID.StopProperty) IsStop = true;
