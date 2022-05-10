@@ -35,11 +35,9 @@ namespace MomoIsYou.Source.Abstract
 			};
 			Window.Draw(tileCenter);
 		}
-		public virtual void Update(Level Level)
+		public void Update(Level Level)
 		{
-			IsYou = false;
-			IsStop = false;
-			IsPush = false;
+			Reset();
 
 			foreach (BaseTile i in Level.Map)
 			{
@@ -51,18 +49,40 @@ namespace MomoIsYou.Source.Abstract
 						if (typeof(BaseOperator).IsAssignableFrom(j.GetType()))
 						{
 							BaseOperator OperatorTile = (BaseOperator)j;
-							foreach (BaseTile k in Level.Map)
+							if (OperatorTile.XPos == TargetTile.XPos + 1 && OperatorTile.YPos == TargetTile.YPos)
 							{
-								if (typeof(BaseProperty).IsAssignableFrom(k.GetType()))
+								foreach (BaseTile k in Level.Map)
 								{
-									BaseProperty PropertyTile = (BaseProperty)k;
-									if (TargetTile.TargetID == TileID)
+									if (typeof(BaseProperty).IsAssignableFrom(k.GetType()))
 									{
-										if ((OperatorTile.XPos == TargetTile.XPos + 1 && OperatorTile.YPos == TargetTile.YPos) || (OperatorTile.XPos == TargetTile.XPos && OperatorTile.YPos == TargetTile.YPos + 1))
+										BaseProperty PropertyTile = (BaseProperty)k;
+										if (TargetTile.TargetID == TileID)
 										{
 											if (OperatorTile.TileID == TileID.IsOperator)
 											{
-												if ((PropertyTile.XPos == TargetTile.XPos + 2 && PropertyTile.YPos == TargetTile.YPos) || (PropertyTile.XPos == TargetTile.XPos && PropertyTile.YPos == TargetTile.YPos + 2))
+												if (PropertyTile.XPos == OperatorTile.XPos + 1 && PropertyTile.YPos == OperatorTile.YPos)
+												{
+													if (PropertyTile.TileID == TileID.YouProperty) IsYou = true;
+													if (PropertyTile.TileID == TileID.StopProperty) IsStop = true;
+													if (PropertyTile.TileID == TileID.PushProperty) IsPush = true;
+												}
+											}
+										}
+									}
+								}
+							}
+							else if (OperatorTile.XPos == TargetTile.XPos && OperatorTile.YPos == TargetTile.YPos + 1)
+							{
+								foreach (BaseTile k in Level.Map)
+								{
+									if (typeof(BaseProperty).IsAssignableFrom(k.GetType()))
+									{
+										BaseProperty PropertyTile = (BaseProperty)k;
+										if (TargetTile.TargetID == TileID)
+										{
+											if (OperatorTile.TileID == TileID.IsOperator)
+											{
+												if (PropertyTile.XPos == OperatorTile.XPos && PropertyTile.YPos == OperatorTile.YPos + 1)
 												{
 													if (PropertyTile.TileID == TileID.YouProperty) IsYou = true;
 													if (PropertyTile.TileID == TileID.StopProperty) IsStop = true;
@@ -78,6 +98,12 @@ namespace MomoIsYou.Source.Abstract
 				}
 			}
 		}
+		public virtual void Reset()
+		{
+			IsYou = false;
+			IsStop = false;
+			IsPush = false;
+		}
 		public bool Move(Direction MoveDirection, Level Level)
 		{
 			if (PushCheck(MoveDirection, Level))
@@ -87,7 +113,7 @@ namespace MomoIsYou.Source.Abstract
 			}
 			else return false;
 		}
-		private void Push(Direction MoveDirection, Level Level)
+		public void Push(Direction MoveDirection, Level Level)
 		{
 			int XTarget = XPos;
 			int YTarget = YPos;
@@ -99,7 +125,7 @@ namespace MomoIsYou.Source.Abstract
 
 			foreach (BaseTile TargetTile in Level.Map)
 			{
-				if (TargetTile.XPos == XTarget && TargetTile.YPos == YTarget)
+				if ((TargetTile.XPos == XTarget && TargetTile.YPos == YTarget) && TargetTile.IsPush)
 				{
 					TargetTile.Push(MoveDirection, Level);
 				}
@@ -107,7 +133,7 @@ namespace MomoIsYou.Source.Abstract
 			XPos = XTarget;
 			YPos = YTarget;
 		}
-		private bool PushCheck(Direction MoveDirection, Level Level)
+		public bool PushCheck(Direction MoveDirection, Level Level)
 		{
 			int XTarget = XPos;
 			int YTarget = YPos;
