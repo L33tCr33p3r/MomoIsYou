@@ -9,4 +9,9 @@
     <PackageReference Include="SFML.Net" Version="2.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Textures\Text\" />
+    <Folder Include="Textures\Sprites\" />
+  </ItemGroup>
+
 </Project>
