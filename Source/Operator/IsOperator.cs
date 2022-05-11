@@ -8,8 +8,7 @@ namespace MomoIsYou.Source.Operator
 		public IsOperator(int XPos, int YPos)
 		{
 			TileID = TileID.IsOperator;
-			TileColor = Color.White;
-			TileTexture = null;
+			TileTexture = new Texture("Textures\\Operator\\IsOperator.png");
 
 			this.XPos = XPos;
 			this.YPos = YPos;

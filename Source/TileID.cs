@@ -3,11 +3,11 @@
 	internal enum TileID
 	{
 		MomoTile,
-		CrateTile,
+		BoxTile,
 		RockTile,
 
 		MomoTarget,
-		CrateTarget,
+		BoxTarget,
 		RockTarget,
 
 		IsOperator,

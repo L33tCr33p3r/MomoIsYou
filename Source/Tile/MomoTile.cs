@@ -8,8 +8,7 @@ namespace MomoIsYou.Source.Tile
 		public MomoTile(int XPos, int YPos)
 		{
 			TileID = TileID.MomoTile;
-			TileColor = Color.Green;
-			TileTexture = null;
+			TileTexture = new Texture("Textures\\Tile\\MomoTile.png");
 
 			this.XPos = XPos;
 			this.YPos = YPos;

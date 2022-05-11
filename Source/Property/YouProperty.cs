@@ -8,8 +8,7 @@ namespace MomoIsYou.Source.Property
 		public YouProperty(int XPos, int YPos)
 		{
 			TileID = TileID.YouProperty;
-			TileColor = Color.Cyan;
-			TileTexture = null;
+			TileTexture = new Texture("Textures\\Property\\YouProperty.png");
 
 			this.XPos = XPos;
 			this.YPos = YPos;

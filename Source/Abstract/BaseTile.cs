@@ -7,7 +7,6 @@ namespace MomoIsYou.Source.Abstract
 	internal abstract class BaseTile
 	{
 		public TileID TileID { get; set; }
-		public Color TileColor { get; set; }
 		public Texture TileTexture { get; set; }
 
 		public int XPos { get; set; }
@@ -17,23 +16,14 @@ namespace MomoIsYou.Source.Abstract
 		public bool IsStop { get; set; }
 		public bool IsPush { get; set; }
 
-		public virtual void Draw(RenderWindow Window)
+		public void Draw(RenderWindow Window)
 		{
-			RectangleShape tileBorder = new RectangleShape()
+			Sprite Sprite = new Sprite()
 			{
-				Size = new Vector2f(100, 100),
+				Texture = TileTexture,
 				Position = new Vector2f(XPos * 100, YPos * 100),
-				FillColor = Color.Black
 			};
-			Window.Draw(tileBorder);
-
-			RectangleShape tileCenter = new RectangleShape()
-			{
-				Size = new Vector2f(90, 90),
-				Position = new Vector2f(XPos * 100 + 5, YPos * 100 + 5),
-				FillColor = TileColor
-			};
-			Window.Draw(tileCenter);
+			Window.Draw(Sprite);
 		}
 		public void Update(Level Level)
 		{
@@ -113,7 +103,7 @@ namespace MomoIsYou.Source.Abstract
 			}
 			else return false;
 		}
-		public void Push(Direction MoveDirection, Level Level)
+		private void Push(Direction MoveDirection, Level Level)
 		{
 			int XTarget = XPos;
 			int YTarget = YPos;
@@ -133,7 +123,7 @@ namespace MomoIsYou.Source.Abstract
 			XPos = XTarget;
 			YPos = YTarget;
 		}
-		public bool PushCheck(Direction MoveDirection, Level Level)
+		private bool PushCheck(Direction MoveDirection, Level Level)
 		{
 			int XTarget = XPos;
 			int YTarget = YPos;

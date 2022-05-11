@@ -3,13 +3,12 @@ using MomoIsYou.Source.Abstract;
 
 namespace MomoIsYou.Source.Target
 {
-    internal class CrateTarget : BaseTarget
+    internal class BoxTarget : BaseTarget
     {
-		public CrateTarget(int XPos, int YPos)
+		public BoxTarget(int XPos, int YPos)
 		{
-			TileID = TileID.CrateTarget;
-			TileColor = Color.Red;
-			TileTexture = null;
+			TileID = TileID.BoxTarget;
+			TileTexture = new Texture("Textures\\Target\\BoxTarget.png");
 
 			this.XPos = XPos;
 			this.YPos = YPos;
@@ -18,7 +17,7 @@ namespace MomoIsYou.Source.Target
 			IsStop = false;
 			IsPush = false;
 
-			TargetID = TileID.CrateTile;
+			TargetID = TileID.BoxTile;
 		}
 	}
 }

@@ -8,8 +8,7 @@ namespace MomoIsYou.Source.Property
 		public StopProperty(int XPos, int YPos)
 		{
 			TileID = TileID.PushProperty;
-			TileColor = Color.Magenta;
-			TileTexture = null;
+			TileTexture = new Texture("Textures\\Property\\StopProperty.png");
 
 			this.XPos = XPos;
 			this.YPos = YPos;

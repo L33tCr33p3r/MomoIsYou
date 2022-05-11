@@ -19,6 +19,8 @@ namespace MomoIsYou.Source
 			RenderWindow Window = new RenderWindow(new VideoMode(800, 800), "Momo is You");
 			Window.Closed += new EventHandler(OnClose);
 
+			Clock Clock = new Clock();
+
 			///////////////////////////////////////// Set up the map ////////////////////////////////////////
 
 			Level Level = new Level(8, 8);
@@ -27,7 +29,7 @@ namespace MomoIsYou.Source
 
 			Level.Map.Add(new RockTile(1, 1));
 
-			Level.Map.Add(new CrateTile(2, 2));
+			Level.Map.Add(new BoxTile(2, 2));
 
 			Level.Map.Add(new MomoTarget(5, 7));
 
@@ -39,46 +41,48 @@ namespace MomoIsYou.Source
 
 			while (Window.IsOpen)
 			{
+				Window.DispatchEvents();
+
 				foreach (BaseTile Tile in Level.Map)
 				{
 					Tile.Update(Level);
 				}
 
-				// User input
-
-				foreach (BaseTile Tile in Level.Map)
+				if (Clock.ElapsedTime > Time.FromSeconds(0.15f))
 				{
-					if (Tile.IsYou)
+					foreach (BaseTile Tile in Level.Map)
 					{
-						if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
+						if (Tile.IsYou)
 						{
-							Tile.Move(Direction.Up, Level);
-						}
-						else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
-						{
-							Tile.Move(Direction.Down, Level);
-						}
-						else if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
-						{
-							Tile.Move(Direction.Left, Level);
-						}
-						else if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
-						{
-							Tile.Move(Direction.Right, Level);
+							if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
+							{
+								Tile.Move(Direction.Up, Level);
+								Clock.Restart();
+							}
+							else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
+							{
+								Tile.Move(Direction.Down, Level);
+								Clock.Restart();
+							}
+							else if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
+							{
+								Tile.Move(Direction.Left, Level);
+								Clock.Restart();
+							}
+							else if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
+							{
+								Tile.Move(Direction.Right, Level);
+								Clock.Restart();
+							}
 						}
 					}
 				}
 
-				// Render section
-				RectangleShape Background = new RectangleShape(new Vector2f(800, 800)) { FillColor = Color.White };
-				Window.Draw(Background);
-				
+				Window.Clear();
+
 				foreach (BaseTile Tile in Level.Map) Tile.Draw(Window);
 				
 				Window.Display();
-
-				// Run SFML event handlers
-				Window.WaitAndDispatchEvents();
 			}
 			return 0;
 		}

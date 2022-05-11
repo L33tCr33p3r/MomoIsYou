@@ -3,13 +3,12 @@ using MomoIsYou.Source.Abstract;
 
 namespace MomoIsYou.Source.Tile
 {
-	internal class CrateTile : BaseTile
+	internal class BoxTile : BaseTile
 	{
-		public CrateTile(int XPos, int YPos)
+		public BoxTile(int XPos, int YPos)
 		{
-			TileID = TileID.CrateTile;
-			TileColor = Color.Red;
-			TileTexture = null;
+			TileID = TileID.BoxTile;
+			TileTexture = new Texture("Textures\\Tile\\BoxTile.png");
 
 			this.XPos = XPos;
 			this.YPos = YPos;
