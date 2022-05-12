@@ -22,6 +22,8 @@ namespace MomoIsYou.Source.Abstract
 			{
 				Texture = TileTexture,
 				Position = new Vector2f(XPos * 100, YPos * 100),
+				Scale = new Vector2f(4f, 4f),
+				TextureRect = new IntRect(0, 0, 24, 24),
 			};
 			Window.Draw(Sprite);
 		}

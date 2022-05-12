@@ -25,17 +25,26 @@ namespace MomoIsYou.Source
 
 			Level Level = new Level(8, 8);
 
+			//////// TILES //////// (objects like the momo sprite, box sprite, etc)
 			Level.Map.Add(new MomoTile(0, 0));
-
 			Level.Map.Add(new RockTile(1, 1));
-
 			Level.Map.Add(new BoxTile(2, 2));
 
-			Level.Map.Add(new MomoTarget(5, 7));
 
-			Level.Map.Add(new IsOperator(6, 7));
+			//////// TARGETS //////// (object text like "MOMO", "ROCK", etc)
+			Level.Map.Add(new MomoTarget(4, 6));
+			Level.Map.Add(new RockTarget(4, 2));
 
-			Level.Map.Add(new YouProperty(7, 7));
+
+			//////// OPERATORS //////// (for now, this is only the "IS" text)
+			Level.Map.Add(new IsOperator(5, 6));
+			Level.Map.Add(new IsOperator(4, 3));
+
+
+			//////// PROPERTIES //////// (adjective text, such as "YOU", "PUSH", etc)
+			Level.Map.Add(new YouProperty(6, 6));
+			Level.Map.Add(new PushProperty(4, 4));
+
 
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
 
