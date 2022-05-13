@@ -17,7 +17,7 @@ namespace MomoIsYou.Source.Abstract
 		public bool IsStop { get; set; }
 		public bool IsPush { get; set; }
 
-		public void Draw(RenderWindow Window)
+		public virtual void Draw(RenderWindow Window)
 		{
 			Sprite Sprite = new Sprite()
 			{
@@ -125,6 +125,8 @@ namespace MomoIsYou.Source.Abstract
 			}
 			XPos = XTarget;
 			YPos = YTarget;
+
+			FaceDirection = MoveDirection;
 		}
 		private bool PushCheck(Direction MoveDirection, Level Level)
 		{
