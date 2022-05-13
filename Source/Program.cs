@@ -59,26 +59,31 @@ namespace MomoIsYou.Source
 
 				if (Clock.ElapsedTime > Time.FromSeconds(0.15f))
 				{
+					bool IsUpPressed = Keyboard.IsKeyPressed(Keyboard.Key.Up);
+					bool IsDownPressed = Keyboard.IsKeyPressed(Keyboard.Key.Down);
+					bool IsLeftPressed = Keyboard.IsKeyPressed(Keyboard.Key.Left);
+					bool IsRightPressed = Keyboard.IsKeyPressed(Keyboard.Key.Right);
+
 					foreach (BaseTile Tile in Level.Map)
 					{
 						if (Tile.IsYou)
 						{
-							if (Keyboard.IsKeyPressed(Keyboard.Key.Up) == true)
+							if (IsUpPressed)
 							{
 								Tile.Move(Direction.Up, Level);
 								Clock.Restart();
 							}
-							else if (Keyboard.IsKeyPressed(Keyboard.Key.Down) == true)
+							else if (IsDownPressed)
 							{
 								Tile.Move(Direction.Down, Level);
 								Clock.Restart();
 							}
-							else if (Keyboard.IsKeyPressed(Keyboard.Key.Left) == true)
+							else if (IsLeftPressed)
 							{
 								Tile.Move(Direction.Left, Level);
 								Clock.Restart();
 							}
-							else if (Keyboard.IsKeyPressed(Keyboard.Key.Right) == true)
+							else if (IsRightPressed)
 							{
 								Tile.Move(Direction.Right, Level);
 								Clock.Restart();
