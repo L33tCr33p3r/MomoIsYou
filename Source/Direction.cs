@@ -2,9 +2,9 @@
 {
 	internal enum Direction
 	{
+		Right,
+		Left,
 		Up,
 		Down,
-		Left,
-		Right,
 	}
 }

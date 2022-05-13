@@ -11,6 +11,7 @@ namespace MomoIsYou.Source.Abstract
 
 		public int XPos { get; set; }
 		public int YPos { get; set; }
+		public Direction FaceDirection { get; set; }
 
 		public bool IsYou { get; set; }
 		public bool IsStop { get; set; }
