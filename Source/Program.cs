@@ -52,17 +52,21 @@ namespace MomoIsYou.Source
 			{
 				Window.DispatchEvents();
 
-				foreach (BaseTile Tile in Level.Map)
-				{
-					Tile.Update(Level);
-				}
-
 				if (Clock.ElapsedTime > Time.FromSeconds(0.15f))
 				{
 					bool IsUpPressed = Keyboard.IsKeyPressed(Keyboard.Key.Up);
 					bool IsDownPressed = Keyboard.IsKeyPressed(Keyboard.Key.Down);
 					bool IsLeftPressed = Keyboard.IsKeyPressed(Keyboard.Key.Left);
 					bool IsRightPressed = Keyboard.IsKeyPressed(Keyboard.Key.Right);
+
+					bool IsSpacePressed = Keyboard.IsKeyPressed(Keyboard.Key.Space);
+
+					bool IsZPressed = Keyboard.IsKeyPressed(Keyboard.Key.Z);
+
+					foreach (BaseTile Tile in Level.Map)
+					{
+						Tile.Update(Level);
+					}
 
 					foreach (BaseTile Tile in Level.Map)
 					{
