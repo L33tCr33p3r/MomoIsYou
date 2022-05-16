@@ -10,7 +10,8 @@ namespace MomoIsYou.Source
 		public int MaxX { get; set; }
 		public int MaxY { get; set; }
 		public List<BaseTile> Map { get; set; } = new List<BaseTile>();
-		
+		public List<List<BaseTile>> Maplog { get; set; } = new List<List<BaseTile>>();
+
 		public Level(int MaxX, int MaxY)
 		{
 			this.MaxX = MaxX;
