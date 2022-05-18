@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
@@ -45,6 +47,9 @@ namespace MomoIsYou.Source
 			Level.Map.Add(new YouProperty(6, 6));
 			Level.Map.Add(new PushProperty(4, 4));
 
+			Console.WriteLine(Directory.GetCurrentDirectory());
+
+			Level.Maplog.Add(new List<BaseTile>(Level.Map));
 
 			/////////////////////////////////////////// Game Loop ///////////////////////////////////////////
 
@@ -68,31 +73,53 @@ namespace MomoIsYou.Source
 						Tile.Update(Level);
 					}
 
-					foreach (BaseTile Tile in Level.Map)
+					if (IsUpPressed)
 					{
-						if (Tile.IsYou)
+						foreach (BaseTile Tile in Level.Map)
 						{
-							if (IsUpPressed)
-							{
-								Tile.Move(Direction.Up, Level);
-								Clock.Restart();
-							}
-							else if (IsDownPressed)
-							{
-								Tile.Move(Direction.Down, Level);
-								Clock.Restart();
-							}
-							else if (IsLeftPressed)
-							{
-								Tile.Move(Direction.Left, Level);
-								Clock.Restart();
-							}
-							else if (IsRightPressed)
-							{
-								Tile.Move(Direction.Right, Level);
-								Clock.Restart();
-							}
+							if (Tile.IsYou) Tile.Move(Direction.Up, Level);
 						}
+						Level.Maplog.Add(new List<BaseTile>(Level.Map));
+						Clock.Restart();
+					}
+					else if (IsDownPressed)
+					{
+						foreach (BaseTile Tile in Level.Map)
+						{
+							if (Tile.IsYou) Tile.Move(Direction.Down, Level);
+						}
+						Level.Maplog.Add(new List<BaseTile>(Level.Map));
+						Clock.Restart();
+					}
+					else if (IsLeftPressed)
+					{
+						foreach (BaseTile Tile in Level.Map)
+						{
+							if (Tile.IsYou) Tile.Move(Direction.Left, Level);
+						}
+						Level.Maplog.Add(new List<BaseTile>(Level.Map));
+						Clock.Restart();
+					}
+					else if (IsRightPressed)
+					{
+						foreach (BaseTile Tile in Level.Map)
+						{
+							if (Tile.IsYou) Tile.Move(Direction.Right, Level);
+						}
+						Level.Maplog.Add(new List<BaseTile>(Level.Map));
+						Clock.Restart();
+					}
+					else if (IsSpacePressed)
+					{
+						Level.Maplog.Add(new List<BaseTile>(Level.Map));
+						Clock.Restart();
+					}
+					else if (IsZPressed)
+					{
+						Console.WriteLine(Level.Maplog.Count);
+						Level.Map = new List<BaseTile>(Level.Maplog[^1]);
+						Level.Maplog.RemoveAt(Level.Maplog.Count - 1);
+						Clock.Restart();
 					}
 				}
 
